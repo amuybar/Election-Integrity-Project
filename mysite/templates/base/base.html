@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Election Integrity App{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Election Integrity App</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home:home' %}">Home</a></li>
+                <li><a href="{% url 'users:login' %}">Login</a></li>
+                <li><a href="{% url 'reporting:dashboard' %}">Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Election Integrity App</p>
+    </footer>
+</body>
+</html>

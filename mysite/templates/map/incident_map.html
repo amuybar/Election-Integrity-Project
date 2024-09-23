@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Incident Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    #map { width: 100%; height: 500px; }
+  </style>
+</head>
+<body>
+  <h1>Incident Map</h1>
+  <div id="map"></div>
+  <script>
+    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [0, 0],
+      zoom: 2
+    });
+
+    // Example: Add markers from your incident data
+    var incidents = {{ incidents|safe }};  // Get incident data from Django view
+    incidents.forEach(function(incident) {
+      new mapboxgl.Marker()
+        .setLngLat([incident.geo_tag.lng, incident.geo_tag.lat])
+        .addTo(map);
+    });
+  </script>
+</body>
+</html>
