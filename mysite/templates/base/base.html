@@ -1,27 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Election Integrity App{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <header>
-        <h1>Election Integrity App</h1>
+        <!-- Navbar Section -->
         <nav>
-            <ul>
-                <li><a href="{% url 'home:home' %}">Home</a></li>
-                <li><a href="{% url 'users:login' %}">Login</a></li>
-                <li><a href="{% url 'reporting:dashboard' %}">Dashboard</a></li>
-            </ul>
+            <div class="container">
+                <a href="#" class="logo">Election Integrity</a>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
         </nav>
     </header>
-    
+
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2024 Election Integrity App</p>
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Election Integrity. All Rights Reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <p>&copy; 2024 Election Integrity App</p>
+        </div>
     </footer>
 </body>
 </html>

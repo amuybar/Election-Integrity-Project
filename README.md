@@ -34,7 +34,7 @@ The **Election Integrity App** is a Django-based web application aimed at provid
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/election-integrity-app.git
+   git clone 
    cd election-integrity-app
 
 ## Set up a virtual environment:
