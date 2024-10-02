@@ -1,57 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Election Integrity App{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/style.css' %}"
+    />
 
     <!-- Render extra CSS block -->
     {% block extra_css %}{% endblock %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/app.js' %}"></script>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <!-- Navbar Section -->
-        <nav>
-            <div class="container">
-                <a href="{% url 'home' %}" class="logo">Election Integrity</a>
-                <div class="menu-icon" id="menu-icon">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'reporting:report_incident' %}">Report Incident</a></li>
-                    <li><a href="{% url 'reporting:incident_map' %}">Incident Map</a></li>
-                    <li><a href="{% url 'reporting:dashboard' %}">Election Dashboard</a></li>
-                    <li><a href="{% url 'reporting:voter_education' %}">Voter Education</a></li>
-                    <li><a href="{% url 'reporting:notifications' %}">Notifications</a></li>
-                    <li><a href="{% url 'reporting:language' %}">Language</a></li>
-                    <li><a href="{% url 'user:login' %}">Login/Sign Up</a></li>
-                </ul>
-            </div>
-        </nav>
+      <!-- Navbar Section -->
+      <nav>
+        <div class="container-nav">
+          <a href="{% url 'home' %}" class="logo">Election Integrity</a>
+          <div class="menu-icon" id="menu-icon">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+          <ul class="nav-links" id="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+            <li>
+              <a href="{% url 'reporting:report_incident' %}"
+                >Report Incident</a
+              >
+            </li>
+            {% else %}
+            <p></p>
+            {% endif %}
+
+            <li>
+              <a href="{% url 'reporting:incident_map' %}">Incident Map</a>
+            </li>
+            <li>
+              <a href="{% url 'reporting:dashboard' %}">Election Dashboard</a>
+            </li>
+            <li>
+              <a href="{% url 'reporting:voter_education' %}"
+                >Voter Education</a
+              >
+            </li>
+            {% if user.is_authenticated %}
+            <li>
+              <a href="{% url 'reporting:notifications' %}">Notifications</a>
+            </li>
+            {% else %}
+
+            <p></p>
+            {% endif %}
+
+            <li><a href="{% url 'reporting:language' %}">Language</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'user:logout' %}">LogOut</a></li>
+            {% else %}
+
+            <li><a href="{% url 'user:login' %}">Sign Up</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
     </header>
 
     <main class="main">{% block content %} {% endblock %}</main>
 
     <!-- Footer Section -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Election Integrity. All Rights Reserved.</p>
-            <ul class="footer-links">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'features' %}">Features</a></li>
-                <li><a href="{% url 'how_it_works' %}">How It Works</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-            </ul>
-            <p>&copy; 2024 Election Integrity App</p>
-        </div>
+      <div class="container-nav">
+        <p>&copy; 2024 Election Integrity. All Rights Reserved.</p>
+        <ul class="footer-links">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'features' %}">Features</a></li>
+          <li><a href="{% url 'how_it_works' %}">How It Works</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+        <p>&copy; 2024 Election Integrity App</p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>

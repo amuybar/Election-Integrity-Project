@@ -17,7 +17,7 @@ body {
     align-items: center;
 }
 
-.container {
+.container-nav{
     padding: 0 20px;
     display: flex;
     flex-direction: row;
@@ -29,9 +29,10 @@ body {
 nav {
     background-color: #2c3e50;
     padding: 20px 0;
-    height: 70px;
     position: relative;
     align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
 }
 
 nav .logo {
@@ -183,7 +184,7 @@ nav ul.nav-links li a:hover {
     }
 
     nav ul.nav-links li a {
-        font-size: 1.5em;
+        font-size: 1em;
         padding-left: 20px;
     }
 
