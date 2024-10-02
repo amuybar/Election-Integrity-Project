@@ -1,9 +1,13 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
-
-  
-  /* Landing Page */
-  .landing-page {
-     background-image: url('./images/landing_image.jpg');
+/* Landing Page */
+.landing-page {
+    background-image: url('./images/landing_image.jpg'); 
     background-size: cover; 
     background-position: center;
     height: 60vh; 
@@ -37,7 +41,7 @@
     animation: fadeInUp 1s forwards;
 }
   
-  .landing-page h1 {
+.landing-page h1 {
     font-size: 3em; 
     margin: 0 0 20px;
     animation: slideIn 1s forwards;
@@ -96,79 +100,83 @@
         font-size: 1.2em; /* Adjust paragraph size on smaller screens */
     }
 }
-  /* Features Section */
-  .features-section {
-    background-color: #f9f9f9;
-    padding: 50px 0;
+
+/* Features Section */
+.features-section {
+    padding: 40px 0;
     text-align: center;
-  }
-  
-  .features-grid {
+    display:flex;
+    flex-direction: column;
+}
+
+.features-grid {
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
-  
-  .feature {
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px;
-    max-width: 250px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .feature h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  
-  /* How It Works Section */
-  .how-it-works {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping of features */
+    padding: 20px 0; /* Add some vertical padding */
+}
+
+.feature {
+    display: inline-block; /* Aligns items in a row */
+    cursor: pointer; /* Changes the cursor to indicate interactivity */
+    margin-right: 20px; /* Space between feature cards */
+    background-color: #f9f9f9; /* Card background */
+    border: 1px solid #ddd; /* Card border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 20px; /* Internal padding */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    width: 250px; /* Fixed width for cards */
+    transition: transform 0.2s; /* Animation for hover effect */
+}
+
+.feature:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* How It Works Section */
+.how-it-works {
     background-color: #ecf0f1;
     padding: 50px 0;
     text-align: center;
-  }
-  
-  .steps-grid {
+}
+
+.steps-grid {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-  }
-  
-  .step {
+}
+
+.step {
     background-color: white;
     border-radius: 8px;
     padding: 20px;
     margin: 10px;
     max-width: 250px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  /* Contact Section */
-  .contact-section {
+}
+
+/* Contact Section */
+.contact-section {
     background-color: #f9f9f9;
     padding: 50px 0;
     text-align: center;
-  }
-  
-  .contact-section form {
+}
+
+.contact-section .contact-form {
     max-width: 500px;
     margin: 0 auto;
-  }
-  
-  .contact-section label {
+}
+
+.contact-section label {
     display: block;
     font-weight: bold;
     margin: 10px 0 5px;
-  }
-  
-  .contact-section input,
-  .contact-section textarea {
+}
+
+.input-field {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;
     border: 1px solid #ccc;
-  }
-  
+}

@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from django.utils.translation import gettext_lazy as _
+from django.forms import ValidationError
+
+AUTH_USER_MODEL = 'users.CustomUser' 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,6 +37,10 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
+ValidationError.default_messages = {
+    'required': _('This field is required.'),
+    'invalid': _('Invalid input.'),
+}
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -93,7 +101,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-# CONNECT WITH SOCIALS FOR AUTHENTICATION
+# CONNECT WITH SOCIALS FOR AUTHENTICATIOn
+
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
