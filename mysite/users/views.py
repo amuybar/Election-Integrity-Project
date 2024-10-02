@@ -3,7 +3,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-
+from django.utils import timezone
+from datetime import timedelta
 # Login View
 def login_view(request):
     if request.method == 'POST':
@@ -14,12 +15,14 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                # Set the session expiry if 'remember_me' is checked
+                if request.POST.get('remember_me'):
+                    request.session.set_expiry(timedelta(days=30))  # Session lasts for 30 days
                 return redirect('home')  # Redirect to home after login
     else:
         form = AuthenticationForm()
     
     return render(request, 'users/login.html', {'form': form})
-
 # Signup View
 def signup_view(request):
     if request.method == 'POST':

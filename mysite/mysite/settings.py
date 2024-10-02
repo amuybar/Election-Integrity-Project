@@ -24,8 +24,14 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-^=6-_k)oh!n9-fpcd1q
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+# ALLOWING EVERY REQUEST
+ALLOWED_HOSTS = ['*']  
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+# ALLOWING CRF REQUEST
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-idx-election-integrity-projectgit-1727873189827.cluster-wxkvpdxct5e4sxx4nbgdioeb46.cloudworkstations.dev',
+]
+
 
 # Application definition
 INSTALLED_APPS = [

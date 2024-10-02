@@ -1,47 +1,101 @@
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
+
 
   
   /* Landing Page */
   .landing-page {
-    background-color: #3498db;
+     background-image: url('./images/landing_image.jpg');
+    background-size: cover; 
+    background-position: center;
+    height: 60vh; 
+    width: 100%;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     color: white;
     text-align: center;
-    padding: 80px 0;
-  }
-  
-  .landing-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
+    overflow: hidden;
+}
+
+.landing-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(44, 62, 80, 0.7); 
+    z-index: 1; 
+}
+
+.landing-content {
+    position: relative; 
+    z-index: 2; 
+    opacity: 0; 
+    transform: translateY(50px); 
+    animation: fadeInUp 1s forwards;
+}
   
   .landing-page h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
-  }
-  
-  .landing-page p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
-  }
-  
-  .btn {
-    background-color: #2c3e50;
+    font-size: 3em; 
+    margin: 0 0 20px;
+    animation: slideIn 1s forwards;
+}
+
+.landing-page p {
+    font-size: 1.5em;
+    margin: 0 0 30px;
+    animation: slideIn 1.2s forwards;
+}
+
+.btn {
+    background-color: #3498db; 
     color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 1.1em;
+    padding: 15px 30px;
     border-radius: 5px;
-  }
-  
-  .btn:hover {
-    background-color: #2980b9;
-  }
-  
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    animation: fadeInUp 1.5s forwards;
+}
+
+.btn:hover {
+    background-color: #2980b9; /* Darker shade on hover */
+}
+
+/* Keyframes for animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .landing-page h1 {
+        font-size: 2.5em; /* Adjust heading size on smaller screens */
+    }
+    
+    .landing-page p {
+        font-size: 1.2em; /* Adjust paragraph size on smaller screens */
+    }
+}
   /* Features Section */
   .features-section {
     background-color: #f9f9f9;
