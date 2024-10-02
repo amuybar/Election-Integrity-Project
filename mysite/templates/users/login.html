@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+
+{% load static %}  <!-- Load the static template tag library -->
+
+{% block title %}Login{% endblock %}
+
+{% block extra_css %}
+ <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2>Login</h2>
+<p>Login to your account to access election reporting and more.</p>
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <!-- Remember me checkbox -->
+  <div>
+    <label for="remember_me">
+      <input type="checkbox" name="remember_me" id="remember_me" />
+      Remember me
+    </label>
+  </div>
+
+  <button type="submit">Login</button>
+
+  <!-- Forgot password link -->
+  <div>
+    <a href="{% url 'user:password_reset' %}">Forgot your password?</a>
+  </div>
+</form>
+
+<hr />
+
+<!-- Social login options -->
+<div class="social-login">
+  <p>Or login with:</p>
+  <button
+    type="button"
+    onclick="window.location.href='{% url 'social:begin' 'google-oauth2' %}'"
+  >
+    Login with Google
+  </button>
+  <button
+    type="button"
+    onclick="window.location.href='{% url 'social:begin' 'facebook' %}'"
+  >
+    Login with Facebook
+  </button>
+</div>
+
+<hr />
+
+<!-- Navigate to registration -->
+<p>Don't have an account? <a href="{% url 'user:signup' %}">Sign Up</a></p>
+{% endblock %}

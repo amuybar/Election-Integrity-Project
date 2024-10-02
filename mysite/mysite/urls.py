@@ -7,4 +7,5 @@ urlpatterns = [
     path('users/', include('users.urls')),  
     path('reporting/', include('reporting.urls')),  
     path('', include('home.urls')),  
+     path('auth/', include('social_django.urls', namespace='social')),
 ]

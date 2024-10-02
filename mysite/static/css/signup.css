@@ -1,0 +1,98 @@
+
+/* Signup container */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Heading styles */
+h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    text-align: center;
+    color: #2c3e50;
+}
+
+/* Paragraph styling */
+p {
+    text-align: center;
+    color: #7f8c8d;
+}
+
+/* Input fields styling */
+input[type="text"], input[type="password"], input[type="email"], input[type="checkbox"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* Submit button styling */
+button[type="submit"] {
+    width: 100%;
+    background-color: #3498db;
+    color: white;
+    padding: 12px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+/* "Remember me" label */
+label {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    display: flex;
+    align-items: center;
+}
+
+/* Links */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Additional info, login link */
+div {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+/* Form layout adjustments for small screens */
+@media (max-width: 600px) {
+    form {
+        padding: 15px;
+    }
+
+    button[type="submit"] {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+}
