@@ -3,6 +3,10 @@ from django.contrib import messages
 from .models import IncidentReport 
 from .forms import IncidentReportForm
 
+
+from django.http import JsonResponse
+from .models import ElectionResult, IncidentReport, County, Constituency, PollingStation
+
 def report_incident(request):
     if request.method == 'POST':
         form = IncidentReportForm(request.POST, request.FILES)
@@ -33,9 +37,67 @@ def report_confirmation(request, incident_id):
 def incident_map_view(request):
     return render(request, 'reporting/incident_map.html')
 
-# Election Dashboard
+
+# Election Dashboard View
 def dashboard_view(request):
-    return render(request, 'reporting/dashboard.html')
+    # Fetch filter options from the database (Counties, Constituencies, etc.)
+    counties = County.objects.all()
+    constituencies = Constituency.objects.all()
+    polling_stations = PollingStation.objects.all()
+
+    # Default: Load results without filters (could also set defaults to show recent results)
+    results = ElectionResult.objects.all()
+    
+    # Filter by County if selected
+    selected_county = request.GET.get('county')
+    if selected_county:
+        results = results.filter(county__name=selected_county)
+
+    # Filter by Constituency if selected
+    selected_constituency = request.GET.get('constituency')
+    if selected_constituency:
+        results = results.filter(constituency__name=selected_constituency)
+
+    # Filter by Polling Station if selected
+    selected_polling_station = request.GET.get('polling_station')
+    if selected_polling_station:
+        results = results.filter(polling_station__name=selected_polling_station)
+
+    # Fetch incidents and pass them for visualization on the map
+    incidents = IncidentReport.objects.all()
+
+    context = {
+        'counties': counties,
+        'constituencies': constituencies,
+        'polling_stations': polling_stations,
+        'results': results,
+        'incidents': incidents,
+    }
+
+    return render(request, 'reporting/dashboard.html', context)
+
+# JSON API to handle dynamic filtering via AJAX (optional)
+def filter_results(request):
+    county = request.GET.get('county', None)
+    constituency = request.GET.get('constituency', None)
+    polling_station = request.GET.get('polling_station', None)
+
+    results = ElectionResult.objects.all()
+
+    if county:
+        results = results.filter(county__name=county)
+    if constituency:
+        results = results.filter(constituency__name=constituency)
+    if polling_station:
+        results = results.filter(polling_station__name=polling_station)
+
+    # Prepare data for JSON response
+    data = {
+        'results': list(results.values('candidate', 'votes', 'polling_station__name', 'constituency__name', 'county__name'))
+    }
+
+    return JsonResponse(data)
+
 
 # Voter Education
 def voter_education_view(request):

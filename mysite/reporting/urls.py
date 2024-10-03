@@ -12,7 +12,7 @@ urlpatterns = [
     path('incident_map/', views.incident_map_view, name='incident_map'),
 
     # Election Dashboard
-    path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('dashboard/', views.dashboard_view, name='dashboard_view'),
 
     # Voter Education
     path('voter_education/', views.voter_education_view, name='voter_education'),

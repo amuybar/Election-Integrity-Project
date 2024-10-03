@@ -118,17 +118,24 @@ nav ul.nav-links li a:hover {
   color: #fff;
   padding: 20px 0;
   text-align: center;
+  width: 100%;
+  position: relative; /* Ensure it's responsive */
 }
 
 .container-footer {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
+  display: flex;
+  justify-content: space-between; /* Spread out elements in wider screens */
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
 
 .footer p {
   font-size: 16px;
   margin: 10px 0;
+  flex: 1 100%; /* Full width on smaller screens */
 }
 
 .footer-links {
@@ -138,6 +145,7 @@ nav ul.nav-links li a:hover {
   display: flex;
   justify-content: center;
   gap: 20px;
+  flex-wrap: wrap; /* Wrap links for smaller screens */
 }
 
 .footer-links li {
@@ -158,8 +166,8 @@ nav ul.nav-links li a:hover {
 .app-credit {
   font-size: 14px;
   color: #ccc;
+  flex: 1 100%; /* Full width for credit section */
 }
-
 
 
 
@@ -219,13 +227,19 @@ nav ul.nav-links li a:hover {
 
     
 
-     .footer p {
+  .container-footer {
+    flex-direction: column; /* Stack footer elements */
+    align-items: center;
+  }
+
+  .footer p {
     font-size: 14px;
+    text-align: center; /* Center text on smaller screens */
   }
 
   .footer-links {
     flex-direction: column;
-    gap: 10px;
+    gap: 10px; /* Stack links */
   }
 
   .footer-links a {
@@ -234,13 +248,15 @@ nav ul.nav-links li a:hover {
 }
 
 @media (max-width: 600px) {
-    
-
    .footer {
     padding: 15px 0;
   }
 
   .footer p, .footer-links a {
     font-size: 13px;
+  }
+
+  .footer-links {
+    gap: 5px; 
   }
 }

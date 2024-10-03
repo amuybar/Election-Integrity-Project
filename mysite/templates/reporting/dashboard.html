@@ -2,7 +2,106 @@
 {% block title %}Election Dashboard{% endblock %}
 
 {% block content %}
-<h2>Election Dashboard</h2>
-<p>View election data and analysis here.</p>
-<!-- Add election data and graphs -->
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/election_dash.css' %}">
+
+
+<div class="dashboard-container">
+    <h1>Election Dashboard</h1>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <h2>Filter Results</h2>
+        <form method="GET" action="{% url 'reporting:dashboard_view' %}">
+            <div class="form-group">
+                <label for="county">County:</label>
+                <select id="county" name="county">
+                    <option value="">Select County</option>
+                    <!-- Loop through counties dynamically -->
+                    {% for county in counties %}
+                    <option value="{{ county.id }}">{{ county.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="constituency">Constituency:</label>
+                <select id="constituency" name="constituency">
+                    <option value="">Select Constituency</option>
+                    <!-- Loop through constituencies dynamically based on county selection -->
+                    {% for constituency in constituencies %}
+                    <option value="{{ constituency.id }}">{{ constituency.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="polling_station">Polling Station:</label>
+                <select id="polling_station" name="polling_station">
+                    <option value="">Select Polling Station</option>
+                    <!-- Loop through polling stations dynamically -->
+                    {% for polling_station in polling_stations %}
+                    <option value="{{ polling_station.id }}">{{ polling_station.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="search">Search Results:</label>
+                <input type="text" id="search" name="search" placeholder="Search by candidate, party, etc.">
+            </div>
+            <button type="submit" class="filter-btn">Apply Filters</button>
+        </form>
+    </div>
+
+    <!-- Election Results Section -->
+    <div class="results-section">
+        <h2>Election Results</h2>
+        <div class="results-overview">
+            <h3>Overview by Position</h3>
+            <div class="results-summary">
+                <!-- Example of presidential results -->
+                <div class="position-result">
+                    <h4>President</h4>
+                    <canvas id="presidential-results-chart"></canvas> <!-- Placeholder for chart -->
+                </div>
+                <div class="position-result">
+                    <h4>Governor</h4>
+                    <canvas id="governor-results-chart"></canvas> <!-- Placeholder for chart -->
+                </div>
+                <!-- Add more positions as needed -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Polling Stations Section -->
+    <div class="polling-section">
+        <h2>Polling Stations</h2>
+        <div class="polling-overview">
+            <table class="polling-table">
+                <thead>
+                    <tr>
+                        <th>Polling Station</th>
+                        <th>Total Votes</th>
+                        <th>Issues Reported</th>
+                        <th>Turnout %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for station in polling_stations %}
+                    <tr class="{% if station.has_issue %}issue-row{% endif %}">
+                        <td>{{ station.name }}</td>
+                        <td>{{ station.total_votes }}</td>
+                        <td>{{ station.issues_reported }}</td>
+                        <td>{{ station.turnout_percentage }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Incident Map Section -->
+    <div class="incident-map-section">
+        <h2>Reported Incidents</h2>
+        <div id="map"></div> <!-- Placeholder for Mapbox/Google Maps -->
+    </div>
+</div>
 {% endblock %}

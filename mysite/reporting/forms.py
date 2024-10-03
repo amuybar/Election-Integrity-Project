@@ -1,24 +1,33 @@
-# REPORT INCIDENT FORM
 from django import forms
-from .models import IncidentReport
+from .models import IncidentReport, ElectionResult
 
+# Form for IncidentReport Model
 class IncidentReportForm(forms.ModelForm):
     class Meta:
         model = IncidentReport
         fields = ['incident_type', 'location', 'date_time', 'description', 'evidence', 'contact_info']
+
+        # Customize widget styles if needed
         widgets = {
-            'date_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'description': forms.Textarea(attrs={'rows': 5}),
+            'incident_type': forms.Select(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_time': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'evidence': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'contact_info': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
-    def clean_evidence(self):
-        evidence = self.cleaned_data.get('evidence')
-        if evidence:
-            file_size = evidence.size
-            max_size = 10 * 1024 * 1024  # 10 MB
-            if file_size > max_size:
-                raise forms.ValidationError("File size must be no more than 10 MB.")
-            file_type = evidence.content_type.split('/')[0]
-            if file_type not in ['image', 'video']:
-                raise forms.ValidationError("Only image or video files are allowed.")
-        return evidence
+# Form for ElectionResult Model
+class ElectionResultForm(forms.ModelForm):
+    class Meta:
+        model = ElectionResult
+        fields = ['candidate', 'votes', 'county', 'constituency', 'polling_station']
+
+        # Customize widget styles if needed
+        widgets = {
+            'candidate': forms.TextInput(attrs={'class': 'form-control'}),
+            'votes': forms.NumberInput(attrs={'class': 'form-control'}),
+            'county': forms.Select(attrs={'class': 'form-control'}),
+            'constituency': forms.Select(attrs={'class': 'form-control'}),
+            'polling_station': forms.Select(attrs={'class': 'form-control'}),
+        }

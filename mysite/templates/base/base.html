@@ -17,6 +17,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
   </head>
   <body>
     <header>
@@ -45,7 +46,8 @@
               <a href="{% url 'reporting:incident_map' %}">Incident Map</a>
             </li>
             <li>
-              <a href="{% url 'reporting:dashboard' %}">Election Dashboard</a>
+              <a href="{% url 'reporting:dashboard_view' %}">Go to Dashboard</a>
+
             </li>
             <li>
               <a href="{% url 'reporting:voter_education' %}"
