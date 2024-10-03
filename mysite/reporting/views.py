@@ -1,8 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import IncidentReport 
+from .forms import IncidentReportForm
 
-# Report Incident
-def report_incident_view(request):
-    return render(request, 'reporting/report_incident.html')
+
+def report_incident(request):
+    if request.method == 'POST':
+        form = IncidentReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            incident = form.save()
+            messages.success(request, 'Your incident report has been submitted successfully.')
+            return redirect('report_confirmation', incident_id=incident.id)
+    else:
+        form = IncidentReportForm()
+    
+    return render(request, 'reporting/report_incident.html', {'form': form})
+
+def report_confirmation(request, incident_id):
+    incident = IncidentReport.objects.get(id=incident_id)
+    return render(request, 'reporting/report_confirmation.html', {'incident': incident})
+
 
 # Incident Map
 def incident_map_view(request):

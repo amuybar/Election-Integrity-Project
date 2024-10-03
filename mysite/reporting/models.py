@@ -1,19 +1,24 @@
+# REPORT INCIDENT MODEL
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.utils import timezone
 
-class Incident(models.Model):
-    INCIDENT_TYPES = (
-        ('fraud', 'Fraud'),
-        ('tampering', 'Ballot Tampering'),
-        ('intimidation', 'Voter Intimidation'),
-    )
+class IncidentReport(models.Model):
+    INCIDENT_TYPES = [
+        ('voter_intimidation', 'Voter Intimidation'),
+        ('machine_malfunction', 'Voting Machine Malfunction'),
+        ('long_wait_times', 'Long Wait Times'),
+        ('misinformation', 'Misinformation'),
+        ('other', 'Other'),
+    ]
+
     incident_type = models.CharField(max_length=50, choices=INCIDENT_TYPES)
-    location = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+    date_time = models.DateTimeField(default=timezone.now)
     description = models.TextField()
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
-    video = models.FileField(upload_to='videos/', blank=True, null=True)
-    reported_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    evidence = models.FileField(upload_to='incident_evidence/', blank=True, null=True)
+    contact_info = models.CharField(max_length=255, blank=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='pending')
 
     def __str__(self):
-        return f"{self.incident_type} reported by {self.reported_by}"
+        return f"{self.get_incident_type_display()} at {self.location}"

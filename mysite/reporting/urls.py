@@ -5,7 +5,9 @@ app_name = 'reporting'
 
 urlpatterns = [
     # Report Incident
-    path('incident/', views.report_incident_view, name='report_incident'),
+    path('incident/', views.report_incident, name='report_incident'),
+     path('report/confirmation/<int:incident_id>/', views.report_confirmation, name='report_confirmation'),
+
 
     # Incident Map
     path('incident_map/', views.incident_map_view, name='incident_map'),

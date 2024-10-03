@@ -19,6 +19,15 @@ def run_tests():
         'users.tests.test_views',
         'users.tests.test_models', 
         # 'users.tests.test_forms', 
+        # Add more test commands as needed
+        'reporting.tests',
+        # 'reporting.tests.test_models',
+        # 'reporting.tests.test_forms',
+        # Add more test commands as needed
+        # 'admin.tests.test_views',
+        # 'admin.tests.test_models',
+        # 'admin.tests.test_forms',
+        # Add more test commands as needed
         
     ]
 

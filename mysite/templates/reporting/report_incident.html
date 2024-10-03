@@ -1,9 +1,74 @@
 {% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Report an Election Incident{% endblock %}
+
 {% block content %}
-  <h2>Report an Incident</h2>
-  <form method="post" enctype="multipart/form-data">
+<div class="report-incident-container">
+  <h1 class="page-title">Report an Election Incident</h1>
+  
+  <div class="info-section">
+    <h2>Why Report?</h2>
+    <p>Your report helps ensure the integrity of our elections. By reporting incidents, you contribute to a fair and transparent democratic process.</p>
+    
+    <h2>What to Report</h2>
+    <ul>
+      <li>Voter intimidation or suppression</li>
+      <li>Voting machine malfunctions</li>
+      <li>Long wait times or polling place issues</li>
+      <li>Misinformation about voting procedures</li>
+      <li>Any other concerns about the election process</li>
+    </ul>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="report-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
+    
+    <div class="form-group">
+      <label for="{{ form.incident_type.id_for_label }}">Type of Incident:</label>
+      {{ form.incident_type }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.location.id_for_label }}">Location:</label>
+      {{ form.location }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.date_time.id_for_label }}">Date and Time:</label>
+      {{ form.date_time }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.description.id_for_label }}">Description:</label>
+      {{ form.description }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.evidence.id_for_label }}">Upload Evidence (Images/Videos):</label>
+      {{ form.evidence }}
+      <small>Accepted formats: jpg, png, mp4, mov (Max size: 10MB)</small>
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.contact_info.id_for_label }}">Contact Information (Optional):</label>
+      {{ form.contact_info }}
+      <small>Your information will be kept confidential and used only for follow-up if necessary.</small>
+    </div>
+
+    <button type="submit" class="submit-btn">Submit Report</button>
   </form>
+
+  <div class="additional-info">
+    <h2>What Happens Next?</h2>
+    <p>After submitting your report:</p>
+    <ol>
+      <li>Our team will review the information provided.</li>
+      <li>We may contact you for additional details if necessary.</li>
+      <li>The incident will be investigated and appropriate action taken.</li>
+      <li>Your report will contribute to our overall assessment of election integrity.</li>
+    </ol>
+    <p>Thank you for your commitment to fair elections!</p>
+  </div>
+</div>
 {% endblock %}
