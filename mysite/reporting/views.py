@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import IncidentReport 
 from .forms import IncidentReportForm
-
 
 def report_incident(request):
     if request.method == 'POST':
@@ -10,16 +9,25 @@ def report_incident(request):
         if form.is_valid():
             incident = form.save()
             messages.success(request, 'Your incident report has been submitted successfully.')
-            return redirect('report_confirmation', incident_id=incident.id)
+            return redirect('reporting:report_confirmation', incident_id=incident.id)
     else:
         form = IncidentReportForm()
     
     return render(request, 'reporting/report_incident.html', {'form': form})
-
 def report_confirmation(request, incident_id):
-    incident = IncidentReport.objects.get(id=incident_id)
-    return render(request, 'reporting/report_confirmation.html', {'incident': incident})
+    # Fetch the incident report object
+    incident = get_object_or_404(IncidentReport, id=incident_id)
+    
+    # You can extract more details to pass to the template if necessary
+    reference_number = incident.date_time 
+    confirmation_message = "Thank you for reporting the incident. Your report has been submitted successfully."
 
+    # Render the confirmation page with more context
+    return render(request, 'reporting/report_confirmation.html', {
+        'incident': incident,
+        'reference_number': reference_number,  
+        'confirmation_message': confirmation_message  
+    })
 
 # Incident Map
 def incident_map_view(request):

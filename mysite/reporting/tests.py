@@ -21,7 +21,6 @@ class IncidentReportModelTest(TestCase):
     def test_incident_report_default_status(self):
         self.assertEqual(self.incident.status, 'pending')
 
-
 class IncidentReportFormTest(TestCase):
     def test_valid_form(self):
         form_data = {
@@ -69,7 +68,6 @@ class IncidentReportFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('evidence', form.errors)
 
-
 class IncidentReportViewTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -105,12 +103,12 @@ class IncidentReportViewTest(TestCase):
         self.assertFalse(response.context['form'].is_valid())
 
     def test_report_confirmation_view(self):
-    incident = IncidentReport.objects.create(
-        incident_type='voter_intimidation',
-        location='Polling Station F',
-        description='Test confirmation incident',
-    )
-    response = self.client.get(reverse('reporting:report_confirmation', args=[incident.id]))
-    self.assertEqual(response.status_code, 200)
-    self.assertTemplateUsed(response, 'reporting/report_confirmation.html')
-    self.assertEqual(response.context['incident'], incident)
+        incident = IncidentReport.objects.create(
+            incident_type='voter_intimidation',
+            location='Polling Station F',
+            description='Test confirmation incident',
+        )
+        response = self.client.get(reverse('reporting:report_confirmation', args=[incident.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'reporting/report_confirmation.html')
+        self.assertEqual(response.context['incident'], incident)

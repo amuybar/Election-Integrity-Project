@@ -11,6 +11,7 @@
       href="{% static 'css/style.css' %}"
     />
 <link rel="stylesheet" href="{% static 'css/report_incident.css' %}">
+<link rel="stylesheet" href="{% static 'css/reporting_confirmation.css' %}">
     <!-- Render extra CSS block -->
     {% block extra_css %}{% endblock %}
 
@@ -75,17 +76,20 @@
     <main class="main">{% block content %} {% endblock %}</main>
 
     <!-- Footer Section -->
-    <footer class="footer">
-      <div class="container-nav">
-        <p>&copy; 2024 Election Integrity. All Rights Reserved.</p>
-        <ul class="footer-links">
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="{% url 'features' %}">Features</a></li>
-          <li><a href="{% url 'how_it_works' %}">How It Works</a></li>
-          <li><a href="{% url 'contact' %}">Contact</a></li>
-        </ul>
-        <p>&copy; 2024 Election Integrity App</p>
-      </div>
-    </footer>
+  <footer class="footer">
+  <div class="container-footer">
+    <p>&copy; 2024 Election Integrity. All Rights Reserved.</p>
+    
+    <ul class="footer-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'features' %}">Features</a></li>
+      <li><a href="{% url 'how_it_works' %}">How It Works</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+    </ul>
+
+    <p class="app-credit">&copy; 2024 Election Integrity App</p>
+  </div>
+</footer>
+
   </body>
 </html>

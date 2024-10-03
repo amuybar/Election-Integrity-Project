@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Report Confirmation{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+  <h1 class="page-title">Report Submitted Successfully</h1>
+  
+  <div class="confirmation-message">
+    <p>Thank you for reporting the incident. Your submission has been received and will be reviewed by our team.</p>
+    <p>Your reference number is: <strong>{{ reference_number }}</strong></p>
+    <p>Please save this reference number for future communication regarding this incident.</p>
+  </div>
+
+  <div class="next-steps">
+    <h2>What Happens Next?</h2>
+    <ol>
+      <li>Our team will review the details of your report.</li>
+      <li>If additional information is needed, we will contact you using the contact details provided (if any).</li>
+      <li>The incident will be thoroughly investigated.</li>
+      <li>Any necessary actions will be taken to address the incident and ensure election integrity.</li>
+    </ol>
+    <p>We appreciate your effort to keep our elections fair and transparent.</p>
+  </div>
+
+  <div class="back-home">
+    <a href="{% url 'home' %}" class="home-link">Return to Home</a>
+  </div>
+</div>
+{% endblock %}
