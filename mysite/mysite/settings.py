@@ -54,8 +54,6 @@ INSTALLED_APPS = [
     'home',
     'users',
     'reporting',
-    'map',
-    'dashboard',
     'social_django',
 ]
 

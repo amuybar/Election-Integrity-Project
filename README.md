@@ -1,3 +1,5 @@
+## ****Under development****
+
 # Election Integrity App
 
 The **Election Integrity App** is a Django-based web application aimed at providing a platform for real-time reporting and tracking of election incidents. It offers secure data submission, a user-friendly dashboard for visualizing election data, and tools to ensure election transparency and accountability.
@@ -25,9 +27,7 @@ The **Election Integrity App** is a Django-based web application aimed at provid
 
 - Python 3.11+
 - Django 5.0+
-- PostgreSQL (or SQLite for development)
-- Git
-- Docker (optional, for deployment)
+
 
 ### Installation Steps
 
@@ -42,7 +42,7 @@ The **Election Integrity App** is a Django-based web application aimed at provid
 ```bash
 python -m venv .venv
 source .venv/bin/activate   # Linux or macOS
-.venv\Scripts\activate      # Windows
+
 ```
 ## Install the dependencies:
 ```bash
@@ -51,19 +51,7 @@ pip install -r requirements.txt
 ## Set up the database:
 ### Open the settings.py file and configure your database settings (PostgreSQL recommended):
 
-
-``` code
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'electiondb',
-        'USER': 'your-db-user',
-        'PASSWORD': 'your-db-password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-If using SQLite (default):
+### Or leave default as below
 
 DATABASES = {
     'default': {
@@ -86,6 +74,15 @@ python manage.py runserver
 Access the app at http://127.0.0.1:8000/.
 ```
 
+## For test
+
+```bash
+**users app**
+python manage.py test users.tests.test_views
+
+**reporting app**
+python manage.py test reporting
+```
 ## Usage
 - **Admin Panel**: Access the admin dashboard at /admin/ to manage users and review incident reports.
 - **Incident Reporting:** Users can submit election-related incidents through the reporting page.
