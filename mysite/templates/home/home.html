@@ -6,42 +6,55 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 
-<!-- Landing Page Section -->
+<!-- LANDING PAGE SECTION: Introduces the app's purpose with a CTA (Call to Action) -->
 <section id="home" class="landing-page">
   <div class="landing-content">
     <h1>Ensure Free and Fair Elections</h1>
     <p>Track election results, report irregularities, and ensure transparency with the Election Integrity App.</p>
-    <a href="#features" class="btn">Explore Features</a>
+    <!-- Use anchor tags instead of JavaScript for navigation -->
+    <div class="cta">
+      <a href="#features" class="btn">Explore Features</a>
+      <a href="{% url 'reporting:incident_map' %}" class="btn">Post Results</a>
+    </div>
   </div>
 </section>
 
-<!-- Features Section -->
+<!-- FEATURES SECTION: Highlights the key features of the app -->
 <section id="features" class="features-section">
   <div class="container">
     <h2>App Features</h2>
     <p>Explore the powerful features of our election integrity application, designed to enhance transparency and empower citizens to actively participate in the electoral process. Each feature below plays a vital role in ensuring a smooth and secure voting experience.</p>
     <div class="features-grid">
-      <div class="feature" onclick="window.location.href='{%  url 'reporting:incident_map'  %}'">
-        <h3>Real-time Reporting</h3>
-        <p>Report election irregularities in real-time with images, videos, and geo-location.</p>
+      <!-- Replace JavaScript with simple anchor links -->
+      <div class="feature">
+        <a href="{% url 'reporting:incident_map' %}">
+          <h3>Real-time Reporting</h3>
+          <p>Report election irregularities in real-time with images, videos, and geo-location.</p>
+        </a>
       </div>
-      <div class="feature" onclick="window.location.href='{% url 'reporting:incident_map' %}'">
-        <h3>Incident Map</h3>
-        <p>View reported incidents on an interactive map to track problems and irregularities.</p>
+      <div class="feature">
+        <a href="{% url 'reporting:incident_map' %}">
+          <h3>Incident Map</h3>
+          <p>View reported incidents on an interactive map to track problems and irregularities.</p>
+        </a>
       </div>
-      <div class="feature" onclick="window.location.href='{%  url 'reporting:incident_map' %}'">
-        <h3>Secure Submission</h3>
-        <p>Submit election data securely, ensuring privacy and data integrity.</p>
+      <div class="feature">
+        <a href="{% url 'reporting:incident_map' %}">
+          <h3>Secure Submission</h3>
+          <p>Submit election data securely, ensuring privacy and data integrity.</p>
+        </a>
       </div>
-      <div class="feature" onclick="window.location.href='{%  url 'reporting:incident_map'  %}'">
-        <h3>Voter Education</h3>
-        <p>Access guides and resources on how to vote and report election issues.</p>
+      <div class="feature">
+        <a href="{% url 'reporting:incident_map' %}">
+          <h3>Voter Education</h3>
+          <p>Access guides and resources on how to vote and report election issues.</p>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- How It Works Section -->
+<!-- HOW IT WORKS SECTION: Describes how users can use the app step-by-step -->
 <section id="how-it-works" class="how-it-works">
   <div class="container">
     <h2>How It Works</h2>
@@ -65,6 +78,8 @@
     </div>
   </div>
 </section>
+
+<!-- FAQ SECTION: Commonly asked questions and their answers -->
 <section id="faq" class="faq-section">
   <h2>Frequently Asked Questions</h2>
   <div class="faq-item">
@@ -79,7 +94,7 @@
     <h3>What happens if I report an issue?</h3>
     <p>We will review your report and take appropriate action, such as investigating further or notifying relevant parties.</p>
   </div>
-  <div class="faq-item"></div>
+  <div class="faq-item">
     <h3>Can I change my mind after reporting an issue?</h3>
     <p>No, you cannot change your mind after reporting an issue. If you believe there is a mistake, you should contact us immediately.</p>
   </div>
@@ -91,9 +106,9 @@
     <h3>How can I track the progress of my report?</h3>
     <p>You can track the progress of your report by visiting your dashboard and checking the status of your report.</p>
   </div>
-
 </section>
 
+<!-- BLOG SECTION: Latest news and articles -->
 <section id="blog" class="blog-section">
   <h2>Latest News</h2>
   <div class="blog-posts">
@@ -111,23 +126,23 @@
       <h3>New Elections in Your Area</h3>
       <p>Stay updated on the latest elections in your area and report any issues.</p>
       <a href="#">Read More</a>
-      </div>
-  <div class="blog-post">
-    <h3>The Impact of Elections on Our Community</h3>
-    <p>Learn about the positive impacts of elections on our community and report any issues.</p>
-    <a href="#">Read More</a>
-  
-  </div>
-  
+    </div>
+    <div class="blog-post">
+      <h3>The Impact of Elections on Our Community</h3>
+      <p>Learn about the positive impacts of elections on our community and report any issues.</p>
+      <a href="#">Read More</a>
+    </div>
   </div>
 </section>
+
+<!-- CTA SECTION: Encourages users to join the movement -->
 <section id="cta" class="cta-section">
   <h2>Join the Movement for Fair Elections</h2>
   <p>Be a part of ensuring transparency and accountability in elections. Sign up today!</p>
   <a href="/signup" class="btn">Get Started</a>
 </section>
 
-<!-- Contact Section -->
+<!-- CONTACT SECTION: A form for users to reach out -->
 <section id="contact" class="contact-section">
   <div class="container">
     <h2>Contact Us</h2>
@@ -146,4 +161,5 @@
     </form>
   </div>
 </section>
+
 {% endblock %}

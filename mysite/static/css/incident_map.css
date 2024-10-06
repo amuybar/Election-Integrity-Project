@@ -1,0 +1,35 @@
+/* incident_map.css */
+
+body {
+    font-family: Arial, sans-serif; 
+}
+
+.map-container {
+    margin: 20px auto; /* Centering the container */
+    max-width: 1200px; 
+    width: 100%; /* Ensure container takes full width */
+}
+
+h1 {
+    text-align: center; /* Center the heading */
+    margin-bottom: 20px; /* Add space below the heading */
+}
+
+#map {
+    height: 600px; /* Set the height of the map */
+    width: 100%; /* Set width to 100% */
+    border: 2px solid #ccc; /* Add a border around the map */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #map {
+        height: 400px; /* Adjust the height for smaller screens */
+    }
+
+    h1 {
+        font-size: 24px; /* Adjust heading size */
+    }
+}

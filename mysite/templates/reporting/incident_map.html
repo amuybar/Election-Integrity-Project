@@ -1,8 +1,76 @@
 {% extends 'base/base.html' %}
+{% load static %}
 {% block title %}Incident Map{% endblock %}
 
 {% block content %}
-<h2>Incident Map</h2>
-<p>Here is a map of all reported incidents during the election.</p>
-<!-- Add map integration (Google Maps API, Mapbox, etc.) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="{% static 'css/incident_map.css' %}"> <!-- Link to your CSS file -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<div class="map-container">
+    <h1>Incident Map</h1>
+    <div id="map" class="map"></div> <!-- Map container -->
+</div>
+
+{% comment %}
+Use json_script to safely serialize the incidents data
+{% endcomment %}
+{{ incidents|json_script:"incidents-data" }}  <!-- Serialize incidents -->
+
+<script>
+    // incidentmap.js
+
+    // Function to set map dimensions
+    function setMapSize() {
+        var mapContainer = document.getElementById('map');
+        mapContainer.style.width = '100%'; // Set width to 100%
+        mapContainer.style.height = '600px'; // Set a fixed height or use a dynamic value
+    }
+
+    // Initialize the map
+    var map = L.map('map', {
+        center: [-1.286389, 36.817223], 
+        zoom: 7, 
+        zoomControl: false, 
+        scrollWheelZoom: false ,
+        doubleClickZoom: false ,
+        dragging: false,
+        touchZoom: false, 
+        trackResize: true 
+    });
+
+    // Set the tile layer (OpenStreetMap in this case)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Define bounds for Kenya
+    var kenyanBounds = L.latLngBounds(
+        // South West corner (approx. coordinates)
+        [4.4 , 37.906193], 
+        // North East corner (approx. coordinates)
+        [-3.28422, 38.75229] 
+
+    );
+
+    // Fit the map to the bounds of Kenya
+    map.fitBounds(kenyanBounds);
+
+    // Retrieve incidents from the JSON script tag
+    var incidents = JSON.parse(document.getElementById('incidents-data').textContent);
+
+    // Add markers for each incident
+    incidents.forEach(function(incident) {
+        // Create a marker for each incident
+        var marker = L.marker([incident.latitude, incident.longitude]).addTo(map);
+        marker.bindPopup('<strong>Incident ID:</strong> ' + incident.id + '<br><strong>Description:</strong> ' + incident.description);
+    });
+
+    // Set the size of the map after it's loaded
+    setMapSize();
+
+    // Optionally, you can add an event listener to handle window resize events
+    window.addEventListener('resize', setMapSize);
+
+</script>
 {% endblock %}

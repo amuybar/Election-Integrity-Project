@@ -16,6 +16,7 @@ urlpatterns = [
 
     # Voter Education
     path('voter_education/', views.voter_education_view, name='voter_education'),
+    
 
     # Notifications
     path('notifications/', views.notifications_view, name='notifications'),

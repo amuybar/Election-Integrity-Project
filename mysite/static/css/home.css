@@ -1,18 +1,34 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif; /* Consider using a modern sans-serif font for better readability */
+    line-height: 1.6; /* Increase line-height for better readability */
+    color: #333; /* Default text color for better contrast */
+}
+a{
+    color: #007bff; /* Blue color for links */
+    text-decoration: none; /* Remove underline from links */
+    transition: color 0.3s ease; /* Add transition effect for hover */
 
+}
+a:hover {
+    color: #0056b3; /* Darker blue color for hover */
+}
 
 h2, h3 {
-    margin-bottom: 20px;
-    font-weight: bold;
+    margin-bottom: 25px; /* Increased margin for better spacing */
+    font-weight: bold; /* Ensure headings are bold */
+    color: #2c3e50; /* Darker color for headings */
 }
 
 p {
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Increased margin for paragraphs */
+    font-size: 1.1em; /* Slightly larger font size for better readability */
 }
 
 /* Landing Page */
 .landing-page {
     background: url('./images/landing_image.jpg') center/cover no-repeat;
-    height: 60vh;
+    height: 70vh; /* Increased height for better visibility */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -42,58 +58,39 @@ p {
     transform: translateY(50px); 
     animation: fadeInUp 1s forwards;
 }
-  
+
 .landing-page h1 {
-    font-size: 3em;
+    font-size: 3.5em; /* Increased font size for more impact */
+    margin-bottom: 15px; /* Margin adjustment */
     animation: slideIn 1s forwards;
 }
 
 .landing-page p {
-    font-size: 1.5em;
+    font-size: 1.6em; /* Slightly larger font size for description */
+    margin-bottom: 30px; /* Increased margin for better spacing */
     animation: slideIn 1.2s forwards;
 }
 
 .btn {
     background-color: #3498db;
     color: white;
-    padding: 15px 30px;
+    padding: 15px 40px; /* Increased padding for larger buttons */
     border-radius: 5px;
     text-decoration: none;
     transition: background-color 0.3s ease;
     animation: fadeInUp 1.5s forwards;
+    font-size: 1.1em; /* Increased font size for buttons */
 }
 
 .btn:hover {
     background-color: #2980b9;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 30px; /* Increased padding for better spacing */
     animation: slideIn 1s forwards 0.5s;
     display: flex;
     flex-direction: column;
@@ -101,20 +98,20 @@ p {
 
 /* Features Section */
 .features-section, .how-it-works, .contact-section, .faq-section, .blog-section, .cta-section {
-    padding: 60px 20px;
+    padding: 80px 20px; /* Increased vertical padding */
     text-align: center;
 }
 
 .features-section h2, .how-it-works h2, .contact-section h2, .cta-section h2, .faq-section h2, .blog-section h2 {
-    font-size: 2.5em;
-    white-space: normal;
+    font-size: 2.8em; /* Increased heading size */
+    margin-bottom: 40px; /* Adjusted margin */
 }
 
 .features-grid, .steps-grid {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
-    gap: 20px;
+    gap: 30px; /* Increased gap between items */
     padding: 20px 0;
 }
 
@@ -122,29 +119,25 @@ p {
     display: inline-block;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
-    padding: 20px;
-    width: 250px;
-    height: 200px;
+    padding: 30px; /* Increased padding */
+    width: 280px; /* Increased width for better space usage */
+    height: 220px; /* Adjusted height */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: transform 0.2s;
+    transition: transform 0.3s;
     text-align: left;
-    overflow: hidden;
 }
 
 .feature h3, .step h3 {
-    font-size: 1.5em;
+    font-size: 1.7em; /* Increased font size for headings */
     color: #050012;
-    white-space: normal;
 }
 
 .feature p, .step p {
-    font-size: 1em;
+    font-size: 1.1em; /* Increased font size for description */
     color: #06001c;
-    margin-bottom: 10px;
-    white-space: normal;
+    margin-bottom: 15px; /* Adjusted margin */
 }
 
 .feature:hover, .step:hover {
@@ -155,9 +148,10 @@ p {
 .features-grid::-webkit-scrollbar, .steps-grid::-webkit-scrollbar {
     display: none;
 }
+
 .features-grid, .steps-grid {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 /* Contact Section */
@@ -175,7 +169,7 @@ p {
 }
 
 .contact-form {
-    max-width: 700px;
+    max-width: 800px; /* Increased width for better space usage */
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -183,19 +177,19 @@ p {
 
 .input-field {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
+    padding: 15px; /* Increased padding for better usability */
+    margin-bottom: 25px; /* Adjusted margin */
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
 .contact-form button {
-    padding: 12px 20px;
+    padding: 15px 25px; /* Increased padding */
     background-color: #3498db;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1em;
+    font-size: 1.1em; /* Increased font size */
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -211,9 +205,9 @@ p {
 }
 
 .faq-item {
-    margin-bottom: 20px;
+    margin-bottom: 25px; /* Increased margin */
     border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+    padding-bottom: 15px; /* Adjusted padding */
 }
 
 .faq-item h3 {
@@ -236,7 +230,7 @@ p {
 .blog-posts {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 30px; /* Increased gap */
     flex-wrap: wrap;
 }
 
@@ -244,14 +238,14 @@ p {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    padding: 20px;
+    width: 320px; /* Increased width */
+    padding: 25px; /* Increased padding */
     text-align: left;
     transition: transform 0.3s ease;
 }
 
 .blog-post h3 {
-    font-size: 1.8em;
+    font-size: 1.9em; /* Increased font size for blog post titles */
     color: #2c3e50;
 }
 
@@ -274,16 +268,21 @@ p {
 .cta-section {
     background-color: #3498db;
     color: #fff;
+    padding: 40px 20px; /* Increased padding */
+}
+
+.cta-section h2 {
+    font-size: 2.5em; /* Increased font size for call to action heading */
 }
 
 .cta-section p {
-    font-size: 1.2em;
+    font-size: 1.3em; /* Increased font size */
 }
 
 .cta-section .btn {
     background-color: #fff;
     color: #3498db;
-    padding: 15px 30px;
+    padding: 15px 40px; /* Increased padding */
     border-radius: 5px;
     font-weight: bold;
     text-decoration: none;
@@ -298,7 +297,7 @@ p {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     h2 {
-        font-size: 2em;
+        font-size: 2.2em; /* Adjusted size for smaller screens */
     }
 
     .features-grid, .steps-grid {
@@ -312,50 +311,7 @@ p {
     }
 
     .faq-item h3 {
-        font-size: 1.5em;
+        font-size: 1.6em; /* Adjusted size */
     }
 }
 
-@media (max-width: 576px) {
-    .landing-page h1 {
-        font-size: 1.8em;
-    }
-
-    .landing-page p {
-        font-size: 1em;
-    }
-
-    .btn {
-        padding: 12px 20px;
-    }
-
-    .feature, .step {
-        width: 100%;
-    }
-
-    h2 {
-        font-size: 1.8em;
-    }
-
-    .cta-section h2 {
-        font-size: 2em;
-    }
-
-    .cta-section p {
-        font-size: 1.1em;
-    }
-
-    .cta-section .btn {
-        padding: 12px 25px;
-        font-size: 1em;
-    }
-
-    .faq-item h3 {
-        font-size: 1.4em;
-    }
-
-    .blog-post {
-        width: 90%;
-        margin-bottom: 20px;
-    }
-}

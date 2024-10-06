@@ -1,25 +1,27 @@
 {% extends 'base/base.html' %}
+{% load static %}
+
 {% block title %}Election Dashboard{% endblock %}
 
-{% block content %}
-{% load static %}
+{% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/election_dash.css' %}">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css" rel="stylesheet" />
+{% endblock %}
 
-
+{% block content %}
 <div class="dashboard-container">
     <h1>Election Dashboard</h1>
 
     <!-- Filters Section -->
     <div class="filters-section">
         <h2>Filter Results</h2>
-        <form method="GET" action="{% url 'reporting:dashboard_view' %}">
+        <form method="GET" action="{% url 'reporting:dashboard_view' %}" id="filter-form">
             <div class="form-group">
                 <label for="county">County:</label>
                 <select id="county" name="county">
                     <option value="">Select County</option>
-                    <!-- Loop through counties dynamically -->
                     {% for county in counties %}
-                    <option value="{{ county.id }}">{{ county.name }}</option>
+                    <option value="{{ county.id }}" {% if request.GET.county == county.id|stringformat:"s" %}selected{% endif %}>{{ county.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -27,9 +29,8 @@
                 <label for="constituency">Constituency:</label>
                 <select id="constituency" name="constituency">
                     <option value="">Select Constituency</option>
-                    <!-- Loop through constituencies dynamically based on county selection -->
                     {% for constituency in constituencies %}
-                    <option value="{{ constituency.id }}">{{ constituency.name }}</option>
+                    <option value="{{ constituency.id }}" {% if request.GET.constituency == constituency.id|stringformat:"s" %}selected{% endif %}>{{ constituency.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -37,71 +38,159 @@
                 <label for="polling_station">Polling Station:</label>
                 <select id="polling_station" name="polling_station">
                     <option value="">Select Polling Station</option>
-                    <!-- Loop through polling stations dynamically -->
                     {% for polling_station in polling_stations %}
-                    <option value="{{ polling_station.id }}">{{ polling_station.name }}</option>
+                    <option value="{{ polling_station.id }}" {% if request.GET.polling_station == polling_station.id|stringformat:"s" %}selected{% endif %}>{{ polling_station.name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
                 <label for="search">Search Results:</label>
-                <input type="text" id="search" name="search" placeholder="Search by candidate, party, etc.">
+                <input type="text" id="search" name="search" placeholder="Search by candidate, party, etc." value="{{ request.GET.search }}">
             </div>
             <button type="submit" class="filter-btn">Apply Filters</button>
         </form>
     </div>
 
+    <!-- Presidential Results Section -->
+    <div class="presidential-results-section">
+        <h2>Presidential Results</h2>
+        {% if presidential_results %}
+            <div class="results-cards">
+                {% for result in presidential_results %}
+                    <div class="candidate-card {% if forloop.first %}leading{% endif %}">
+                        <img src="{{ result.candidate__image.url }}" alt="{{ result.candidate__name }}">
+                        <h3>{{ result.candidate__name }}</h3>
+                        <p>Total Votes: {{ result.total_votes }}</p>
+                        <p>Percentage: {{ result.percentage|floatformat:2 }}%</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No presidential results available.</p>
+        {% endif %}
+    </div>
+
     <!-- Election Results Section -->
     <div class="results-section">
         <h2>Election Results</h2>
-        <div class="results-overview">
-            <h3>Overview by Position</h3>
-            <div class="results-summary">
-                <!-- Example of presidential results -->
-                <div class="position-result">
-                    <h4>President</h4>
-                    <canvas id="presidential-results-chart"></canvas> <!-- Placeholder for chart -->
+        {% if results %}
+            <div class="results-overview">
+                <h3>Overview by Position</h3>
+                <div class="results-summary">
+                    {% regroup results by get_position_display as position_results %}
+                    {% for position in position_results %}
+                        <div class="position-result">
+                            <h4>{{ position.grouper }}</h4>
+                            <canvas id="{{ position.grouper|slugify }}-results-chart" class="results-chart"></canvas>
+                            <ul>
+                                {% for result in position.list %}
+                                    <li>{{ result.candidate }}: {{ result.votes }} votes</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
                 </div>
-                <div class="position-result">
-                    <h4>Governor</h4>
-                    <canvas id="governor-results-chart"></canvas> <!-- Placeholder for chart -->
-                </div>
-                <!-- Add more positions as needed -->
             </div>
-        </div>
+            <div class="turnout-info">
+                <h3>Voter Turnout</h3>
+                <p>Total Voter Turnout: {{ turnout_percentage|floatformat:2 }}%</p>
+            </div>
+        {% else %}
+            <p>No election results available.</p>
+        {% endif %}
     </div>
 
-    <!-- Polling Stations Section -->
+    <!-- Polling Section -->
     <div class="polling-section">
         <h2>Polling Stations</h2>
-        <div class="polling-overview">
-            <table class="polling-table">
-                <thead>
-                    <tr>
-                        <th>Polling Station</th>
-                        <th>Total Votes</th>
-                        <th>Issues Reported</th>
-                        <th>Turnout %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for station in polling_stations %}
-                    <tr class="{% if station.has_issue %}issue-row{% endif %}">
-                        <td>{{ station.name }}</td>
-                        <td>{{ station.total_votes }}</td>
-                        <td>{{ station.issues_reported }}</td>
-                        <td>{{ station.turnout_percentage }}%</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <table class="polling-table">
+            <thead>
+                <tr>
+                    <th>Station Name</th>
+                    <th>County</th>
+                    <th>Constituency</th>
+                    <th>Total Votes Cast</th>
+                    <th>Turnout Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for station in polling_stations %}
+                <tr>
+                    <td>{{ station.name }}</td>
+                    <td>{{ station.constituency.county.name }}</td>
+                    <td>{{ station.constituency.name }}</td>
+                    <td>{{ station.total_votes }}</td>
+                    <td>{{ station.turnout_percentage|floatformat:2 }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <!-- Incident Map Section -->
     <div class="incident-map-section">
-        <h2>Reported Incidents</h2>
-        <div id="map"></div> <!-- Placeholder for Mapbox/Google Maps -->
+        <h2>Incidents Map</h2>
+        <div id="incident-map"></div>
     </div>
+
+    <!-- Quick Links Section -->
+    <div class="quick-links-section">
+        <h2>Quick Links</h2>
+        <ul>
+            <li><a href="#">Election Overview</a></li>
+            <li><a href="#">Incidents Reporting</a></li>
+            <li><a href="#">Polling Station Finder</a></li>
+        </ul>
+    </div>
+
 </div>
+<script id="positionResultsData" type="application/json">{{ results|safe }}</script>
+<script id="incidentsData" type="application/json">{{ incidents|safe }}</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js"></script>
+<script src="{% static 'js/chart.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const countySelect = document.getElementById('county');
+        const constituencySelect = document.getElementById('constituency');
+        const pollingStationSelect = document.getElementById('polling_station');
+
+        countySelect.addEventListener('change', function() {
+            updateFilters('county');
+        });
+
+        constituencySelect.addEventListener('change', function() {
+            updateFilters('constituency');
+        });
+
+        function updateFilters(changedFilter) {
+            const county = countySelect.value;
+            const constituency = constituencySelect.value;
+
+            fetch(`/filter-results/?county=${county}&constituency=${constituency}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (changedFilter === 'county') {
+                        updateSelect(constituencySelect, data.constituencies);
+                        updateSelect(pollingStationSelect, []);
+                    } else if (changedFilter === 'constituency') {
+                        updateSelect(pollingStationSelect, data.polling_stations);
+                    }
+                });
+        }
+
+        function updateSelect(selectElement, options) {
+            selectElement.innerHTML = '<option value="">Select</option>';
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.id;
+                optionElement.textContent = option.name;
+                selectElement.appendChild(optionElement);
+            });
+        }
+    });
+</script>
 {% endblock %}

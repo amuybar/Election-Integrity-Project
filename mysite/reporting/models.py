@@ -1,7 +1,15 @@
 from django.db import models
 from django.utils import timezone
 
-# ELECTION DASHBOARD MODEL
+
+class Candidate(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='candidates/')  # Image field for candidate pictures
+
+    def __str__(self):
+        return self.name
+
+
 
 class County(models.Model):
     name = models.CharField(max_length=100)
@@ -19,21 +27,32 @@ class Constituency(models.Model):
 class PollingStation(models.Model):
     name = models.CharField(max_length=100)
     constituency = models.ForeignKey(Constituency, on_delete=models.CASCADE)
+    registered_voters = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
 
+
 class ElectionResult(models.Model):
-    candidate = models.CharField(max_length=100)
+    POSITION_CHOICES = [
+        ('president', 'President'),
+        ('governor', 'Governor'),
+        ('senator', 'Senator'),
+        ('mp', 'Member of Parliament'),
+        ('mca', 'Member of County Assembly'),
+    ]
+
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)  # Change from CharField to ForeignKey
     votes = models.IntegerField()
+    position = models.CharField(max_length=20, choices=POSITION_CHOICES)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     constituency = models.ForeignKey(Constituency, on_delete=models.CASCADE)
     polling_station = models.ForeignKey(PollingStation, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.candidate} - {self.votes} votes"
+        return f"{self.candidate.name} - {self.get_position_display()} - {self.votes} votes"
 
-# REPORT INCIDENT MODEL
+
 class IncidentReport(models.Model):
     INCIDENT_TYPES = [
         ('voter_intimidation', 'Voter Intimidation'),
@@ -54,8 +73,8 @@ class IncidentReport(models.Model):
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     constituency = models.ForeignKey(Constituency, on_delete=models.CASCADE, null=True, blank=True)
     polling_station = models.ForeignKey(PollingStation, on_delete=models.CASCADE, null=True, blank=True)
-    latitude = models.FloatField(null=False)
-    longitude = models.FloatField(null=False)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.get_incident_type_display()} at {self.location}"

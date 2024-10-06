@@ -56,9 +56,7 @@ INSTALLED_APPS = [
     'reporting',
     'map',
     'dashboard',
-    'education',
-    'corruption',
-     'social_django',
+    'social_django',
 ]
 
 MIDDLEWARE = [

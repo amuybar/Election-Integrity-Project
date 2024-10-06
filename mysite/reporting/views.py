@@ -1,11 +1,98 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import IncidentReport 
-from .forms import IncidentReportForm
-
-
+from django.db.models import Sum, F
 from django.http import JsonResponse
 from .models import ElectionResult, IncidentReport, County, Constituency, PollingStation
+from .forms import IncidentReportForm
+
+def dashboard_view(request):
+    # Fetch filter options from the database
+    counties = County.objects.all()
+    constituencies = Constituency.objects.none()
+    polling_stations = PollingStation.objects.none()
+
+    # Initialize the queryset for election results
+    results = ElectionResult.objects.all()
+
+    # Apply filters based on user input
+    county_id = request.GET.get('county')
+    constituency_id = request.GET.get('constituency')
+    polling_station_id = request.GET.get('polling_station')
+    search_query = request.GET.get('search')
+
+    if county_id:
+        results = results.filter(county_id=county_id)
+        constituencies = Constituency.objects.filter(county_id=county_id)
+        if constituency_id:
+            results = results.filter(constituency_id=constituency_id)
+            polling_stations = PollingStation.objects.filter(constituency_id=constituency_id)
+            if polling_station_id:
+                results = results.filter(polling_station_id=polling_station_id)
+
+    if search_query:
+        results = results.filter(candidate__name__icontains=search_query)  # Updated to filter candidate name correctly
+
+    # Get presidential results
+    presidential_results = results.filter(position='president').values('candidate__name', 'candidate__image').annotate(
+        total_votes=Sum('votes'),
+        percentage=Sum('votes') * 100.0 / Sum('votes', filter=F('position')=='president')
+    ).order_by('-total_votes')
+
+    # Calculate turnout percentage
+    total_registered_voters = PollingStation.objects.aggregate(total=Sum('registered_voters'))['total'] or 1
+    total_votes = results.aggregate(total=Sum('votes'))['total'] or 0
+    turnout_percentage = (total_votes / total_registered_voters) * 100
+
+    # Prepare polling station data
+    polling_stations = PollingStation.objects.annotate(
+        total_votes=Sum('electionresult__votes'),
+        turnout_percentage=F('total_votes') * 100.0 / F('registered_voters')
+    ).filter(id=polling_station_id) if polling_station_id else PollingStation.objects.annotate(
+        total_votes=Sum('electionresult__votes'),
+        turnout_percentage=F('total_votes') * 100.0 / F('registered_voters')
+    )
+
+    # Fetch incident reports
+    incidents = IncidentReport.objects.all()
+
+    context = {
+        'counties': counties,
+        'constituencies': constituencies,
+        'polling_stations': polling_stations,
+        'results': results,
+        'presidential_results': presidential_results,
+        'incidents': incidents,
+        'turnout_percentage': turnout_percentage,
+    }
+
+    return render(request, 'reporting/dashboard.html', context)
+
+def filter_results(request):
+    county_id = request.GET.get('county')
+    constituency_id = request.GET.get('constituency')
+    polling_station_id = request.GET.get('polling_station')
+
+    constituencies = Constituency.objects.filter(county_id=county_id) if county_id else Constituency.objects.none()
+    polling_stations = PollingStation.objects.filter(constituency_id=constituency_id) if constituency_id else PollingStation.objects.none()
+
+    results = ElectionResult.objects.all()
+
+    if county_id:
+        results = results.filter(county_id=county_id)
+
+    if constituency_id:
+        results = results.filter(constituency_id=constituency_id)
+
+    if polling_station_id:
+        results = results.filter(polling_station_id=polling_station_id)
+
+    data = {
+        'results': list(results.values('candidate', 'votes', 'position', 'polling_station__name', 'constituency__name', 'county__name')),
+        'constituencies': list(constituencies.values('id', 'name')),
+        'polling_stations': list(polling_stations.values('id', 'name')),
+    }
+
+    return JsonResponse(data)
 
 def report_incident(request):
     if request.method == 'POST':
@@ -18,95 +105,64 @@ def report_incident(request):
         form = IncidentReportForm()
     
     return render(request, 'reporting/report_incident.html', {'form': form})
+
 def report_confirmation(request, incident_id):
-    # Fetch the incident report object
     incident = get_object_or_404(IncidentReport, id=incident_id)
-    
-    # You can extract more details to pass to the template if necessary
-    reference_number = incident.date_time 
+    reference_number = f"INC-{incident.id:05d}"
     confirmation_message = "Thank you for reporting the incident. Your report has been submitted successfully."
 
-    # Render the confirmation page with more context
     return render(request, 'reporting/report_confirmation.html', {
         'incident': incident,
-        'reference_number': reference_number,  
-        'confirmation_message': confirmation_message  
+        'reference_number': reference_number,
+        'confirmation_message': confirmation_message
     })
 
-# Incident Map
+
+# INCIDENT MAP VIEW
 def incident_map_view(request):
-    return render(request, 'reporting/incident_map.html')
-
-
-# Election Dashboard View
-def dashboard_view(request):
-    # Fetch filter options from the database (Counties, Constituencies, etc.)
-    counties = County.objects.all()
-    constituencies = Constituency.objects.all()
-    polling_stations = PollingStation.objects.all()
-
-    # Default: Load results without filters (could also set defaults to show recent results)
-    results = ElectionResult.objects.all()
-    
-    # Filter by County if selected
-    selected_county = request.GET.get('county')
-    if selected_county:
-        results = results.filter(county__name=selected_county)
-
-    # Filter by Constituency if selected
-    selected_constituency = request.GET.get('constituency')
-    if selected_constituency:
-        results = results.filter(constituency__name=selected_constituency)
-
-    # Filter by Polling Station if selected
-    selected_polling_station = request.GET.get('polling_station')
-    if selected_polling_station:
-        results = results.filter(polling_station__name=selected_polling_station)
-
-    # Fetch incidents and pass them for visualization on the map
+    # Fetch all incident reports from the database
     incidents = IncidentReport.objects.all()
+    
+    # Prepare data to send to the template
+    incident_data = [
+        {
+            'id': incident.id,
+            'latitude': incident.latitude,  # Assuming you have a latitude field
+            'longitude': incident.longitude,  # Assuming you have a longitude field
+            'description': incident.description,  # Assuming you have a description field
+        }
+        for incident in incidents
+    ]
 
-    context = {
-        'counties': counties,
-        'constituencies': constituencies,
-        'polling_stations': polling_stations,
-        'results': results,
-        'incidents': incidents,
-    }
+    return render(request, 'reporting/incident_map.html', {'incidents': incident_data})
 
-    return render(request, 'reporting/dashboard.html', context)
-
-# JSON API to handle dynamic filtering via AJAX (optional)
-def filter_results(request):
-    county = request.GET.get('county', None)
-    constituency = request.GET.get('constituency', None)
-    polling_station = request.GET.get('polling_station', None)
-
-    results = ElectionResult.objects.all()
-
-    if county:
-        results = results.filter(county__name=county)
-    if constituency:
-        results = results.filter(constituency__name=constituency)
-    if polling_station:
-        results = results.filter(polling_station__name=polling_station)
-
-    # Prepare data for JSON response
-    data = {
-        'results': list(results.values('candidate', 'votes', 'polling_station__name', 'constituency__name', 'county__name'))
-    }
-
-    return JsonResponse(data)
-
-
-# Voter Education
 def voter_education_view(request):
+    # Placeholder for voter education content
     return render(request, 'reporting/voter_education.html')
 
-# Notifications
 def notifications_view(request):
-    return render(request, 'reporting/notifications.html')
+    # Placeholder for notifications fetching logic
+    notifications = []  # Replace with actual notification fetching logic
+    return render(request, 'reporting/notifications.html', {'notifications': notifications})
 
-# Language Selection
 def language_view(request):
-    return render(request, 'reporting/language.html')
+    # Placeholder for language selection logic
+    available_languages = ['en', 'sw', 'fr']  # Example languages
+    return render(request, 'reporting/language.html', {'available_languages': available_languages})
+
+def election_results_api(request):
+    # API endpoint for fetching election results
+    results = ElectionResult.objects.all()
+    data = list(results.values('candidate', 'votes', 'position', 'polling_station__name', 'constituency__name', 'county__name'))
+    return JsonResponse({'results': data})
+
+def incident_report_api(request):
+    # API endpoint for submitting incident reports
+    if request.method == 'POST':
+        form = IncidentReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            incident = form.save()
+            return JsonResponse({'status': 'success', 'incident_id': incident.id})
+        return JsonResponse({'status': 'error', 'errors': form.errors})
+
+    return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'})
